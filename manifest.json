@@ -1,0 +1,13 @@
+{
+    "dependencies": {
+        "github.com/go-sql-driver/mysql": {
+            "branch": "master"
+        },
+        "github.com/gocraft/dbr": {
+            "branch": "master"
+        },
+        "github.com/gotoeveryone/golang": {
+            "branch": "master"
+        }
+    }
+}

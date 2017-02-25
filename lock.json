@@ -1,0 +1,30 @@
+{
+    "memo": "",
+    "projects": [
+        {
+            "name": "github.com/go-sql-driver/mysql",
+            "branch": "master",
+            "revision": "2e00b5cd70399450106cec6431c2e2ce3cae5034",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gocraft/dbr",
+            "branch": "master",
+            "revision": "10fa49bf1ee63a0f822283ef9805d818f9e84742",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gotoeveryone/golang",
+            "branch": "master",
+            "revision": "5182330cbbc1edfbe48579d10c999db0df0ea812",
+            "packages": [
+                "common",
+                "logs"
+            ]
+        }
+    ]
+}
