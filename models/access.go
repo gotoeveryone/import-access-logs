@@ -7,7 +7,7 @@ type (
 	AccessDetail struct {
 		ID          int       `db:"id"`
 		IPAddress   string    `db:"ip_address"`
-		AccessDate  time.Time `db:"access_time"`
+		AccessTime  time.Time `db:"access_time"`
 		AccessURL   string    `db:"access_url"`
 		HTTPReferer string    `db:"http_referer"`
 		UserAgent   string    `db:"user_agent"`

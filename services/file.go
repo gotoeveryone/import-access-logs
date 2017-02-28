@@ -7,6 +7,10 @@ import (
 	"os"
 )
 
+const (
+	backupDir = "/share/analytics/backup/"
+)
+
 // GetFile ファイルを取得します。
 func GetFile(filename string) (*os.File, error) {
 	// ZIPファイルを開く
@@ -14,6 +18,8 @@ func GetFile(filename string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer r.Close()
+
 	// 内部のファイルを走査
 	for _, f := range r.File {
 		// ファイルを開く
@@ -28,11 +34,11 @@ func GetFile(filename string) (*os.File, error) {
 			return nil, err
 		}
 
-		if err := os.MkdirAll("/share/analytics/backup/", 0775); err != nil {
+		if err := os.MkdirAll(backupDir, 0775); err != nil {
 			return nil, err
 		}
 
-		file, err := os.Create("/share/analytics/backup/" + filename + ".log")
+		file, err := os.Create(backupDir + filename + ".log")
 		if err != nil {
 			return nil, err
 		}
