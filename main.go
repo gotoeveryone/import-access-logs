@@ -2,8 +2,11 @@ package main
 
 import (
 	"add-access-detail/controllers"
+	"add-access-detail/models"
+	"add-access-detail/services"
 	"bytes"
-	"strconv"
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gotoeveryone/golang/common"
@@ -11,30 +14,79 @@ import (
 	"github.com/gotoeveryone/golang/mail"
 )
 
+const (
+	path       = "/share/analytics/k2ss.info/logs/"
+	successDir = "/share/analytics/完了/"
+)
+
+var (
+	// 設定
+	config common.Config
+
+	// 出力用
+	results []models.Result
+)
+
 func main() {
+	start := time.Now()
+
 	// 設定ファイル読み出し
-	var config common.Config
 	common.LoadConfig(&config)
 
 	// 件名
-	subject := "【自動通知】" + time.Now().Format("20060102") + "_K2SSアクセスデータ取り込み"
+	subject := fmt.Sprintf("【自動通知】%s_K2SSアクセスデータ取り込み", time.Now().Format("20060102"))
 
-	// データ登録
-	results := map[string]int{}
-	if err := controllers.Regist(config, &results); err != nil {
+	// エラー
+	errors := []string{}
+
+	// 一時ディレクトリ作成
+	if err := services.CreateTempDir(path); err != nil {
 		logs.Error(err)
-		subject = subject + "異常終了"
+		errors = append(errors, err.Error())
+	} else {
+		// アクセスログ登録
+		if err := controllers.AddAccessLogs(config, path, successDir, &results); err != nil {
+			logs.Error(err)
+			errors = append(errors, err.Error())
+			subject = "※失敗！ " + subject
+		}
+
+		// 一時ディレクトリ削除
+		if err := services.RemoveTempDir(); err != nil {
+			logs.Error(err)
+			errors = append(errors, err.Error())
+		}
 	}
 
-	// 本文
+	// メール送信
+	if len(results) > 0 || len(errors) > 0 {
+		if err := sendMail(start, subject, errors); err != nil {
+			logs.Error(err)
+		}
+	}
+}
+
+// 結果通知メールを送信します。
+func sendMail(start time.Time, subject string, errors []string) error {
 	var buffer bytes.Buffer
-	for k, v := range results {
-		buffer.WriteString(k + ": " + strconv.Itoa(v) + "件\n")
+	buffer.WriteString(fmt.Sprintf("開始時間：%s | 終了時間：%s",
+		start.Format("2006/01/02 15:04:05"), time.Now().Format("2006/01/02 15:04:05")))
+	buffer.WriteString("\n\n")
+
+	// エラーがあれば追加
+	if len(errors) > 0 {
+		buffer.WriteString(strings.Join(errors, "\n"))
+	}
+
+	// 本文作成
+	for _, v := range results {
+		buffer.WriteString(fmt.Sprintf("%s - %d件\n", v.Day, v.Count))
 	}
 
 	// メール送信
 	if err := mail.SendMail(config, subject, buffer.String()); err != nil {
-		logs.Error(err)
+		return err
 	}
 	logs.Info("メールを送信しました。")
+	return nil
 }

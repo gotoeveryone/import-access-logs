@@ -3,18 +3,25 @@ package services
 import (
 	"archive/zip"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
 
-const (
-	backupDir = "/share/analytics/backup/"
+var (
+	tempDir string
 )
 
+// CreateTempDir 一時ディレクトリを作成します。
+func CreateTempDir(dirname string) error {
+	tempDir = dirname + "tmp/"
+	return os.MkdirAll(tempDir, 0775)
+}
+
 // GetFile ファイルを取得します。
-func GetFile(filename string) (*os.File, error) {
+func GetFile(dirname, filename string) (*os.File, error) {
 	// ZIPファイルを開く
-	r, err := zip.OpenReader("/share/analytics/k2ss.info/logs/ssl_access_log." + filename + ".zip")
+	r, err := zip.OpenReader(dirname + filename)
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +41,7 @@ func GetFile(filename string) (*os.File, error) {
 			return nil, err
 		}
 
-		if err := os.MkdirAll(backupDir, 0775); err != nil {
-			return nil, err
-		}
-
-		file, err := os.Create(backupDir + filename + ".log")
+		file, err := os.Create(fmt.Sprintf("%s%s.log", tempDir, filename))
 		if err != nil {
 			return nil, err
 		}
@@ -50,5 +53,13 @@ func GetFile(filename string) (*os.File, error) {
 		// 現在は1つなので1周で終了
 		return file, nil
 	}
-	return nil, errors.New("走査対象なし")
+	return nil, errors.New("対象ファイルなし")
+}
+
+// RemoveTempDir 一時ディレクトリを削除します。
+func RemoveTempDir() error {
+	if tempDir == "" {
+		return nil
+	}
+	return os.RemoveAll(tempDir)
 }
