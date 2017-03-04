@@ -14,6 +14,9 @@
 
 ## 実行準備
 
+任意ディレクトリに「config.json」を作成する。  
+[こちら](https://github.com/gotoeveryone/golang "gotoeveryone/golang") を参照のこと。  
+
 以下コマンドで実行する（Windowsの場合はバイナリ名の末尾に`.exe`が必要）。
 
 ```sh
