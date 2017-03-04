@@ -164,6 +164,9 @@ func createDetails(tx *dbr.Tx, file *os.File) ([]models.AccessDetail, error) {
 		access.AccessTime = &t
 		access.AccessURL = m[3]
 		access.HTTPReferer = m[5]
+		if len(access.HTTPReferer) > 512 {
+			access.HTTPReferer = access.HTTPReferer[:512]
+		}
 		access.UserAgent = m[6]
 
 		details = append(details, access)
