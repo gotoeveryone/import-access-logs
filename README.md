@@ -23,5 +23,5 @@
 # depの最新を取得
 $GOPATH/dep ensure -update
 go build -o add-access-detail
-add-access-detail
+add-access-detail --conf=<config.json put directory>
 ```
