@@ -14,16 +14,20 @@
 
 ## 実行準備
 
-任意ディレクトリに「config.json」を作成する。  
-[こちら](https://github.com/gotoeveryone/golang "gotoeveryone/golang") を参照のこと。  
+1. プロジェクトを`$GOPATH/src`直下に配備する。
 
-以下コマンドで実行する（Windowsの場合はバイナリ名の末尾に`.exe`が必要）。
+2. `dep`を取得し、依存ライブラリを取得する。
+```sh
+go get -u github.com/golang/dep/...
+$GOPATH/bin/dep ensure
+```
+
+3. 任意ディレクトリに「config.json」を作成する。  
+※設定については[Golang用共通ライブラリ](https://github.com/gotoeveryone/golang)を参照
+
+4. ビルドして実行する（Windowsの場合はバイナリ名の末尾に`.exe`が必要）。
 
 ```sh
-# depの最新を取得
-$GOPATH/dep ensure -update
-
-# build
 go build -o add-access-detail
 add-access-detail --conf=<config.json put directory>
 ```

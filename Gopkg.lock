@@ -1,0 +1,19 @@
+memo = ""
+
+[[projects]]
+  branch = "master"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  revision = "2e00b5cd70399450106cec6431c2e2ce3cae5034"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/gocraft/dbr"
+  packages = ["."]
+  revision = "10fa49bf1ee63a0f822283ef9805d818f9e84742"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/gotoeveryone/golang"
+  packages = ["common","logs","mail"]
+  revision = "243f9cd068c8d54a0c62daa2edf009e8974aee39"

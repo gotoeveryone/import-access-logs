@@ -1,0 +1,12 @@
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/go-sql-driver/mysql"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gocraft/dbr"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gotoeveryone/golang"
