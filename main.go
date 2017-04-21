@@ -66,6 +66,10 @@ func main() {
 			logs.Error(err)
 			os.Exit(1)
 		}
+	}
+
+	// エラー保持状態なら異常終了
+	if len(errors) > 0 {
 		os.Exit(1)
 	}
 }
