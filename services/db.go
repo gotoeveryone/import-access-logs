@@ -75,6 +75,8 @@ func insert(tx *dbr.Tx, detail models.AccessDetail) error {
 		Record(detail).Exec()
 
 	if err != nil {
+		logs.Error("登録エラー")
+		logs.Error(detail)
 		return err
 	}
 

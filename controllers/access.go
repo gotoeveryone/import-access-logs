@@ -141,6 +141,10 @@ func createDetails(tx *dbr.Tx, file *os.File) ([]models.AccessDetail, error) {
 			strings.HasPrefix(m[3], "/adm") || strings.HasPrefix(m[3], "/blog") {
 			continue
 		}
+		// "/girlfriend"も除外
+		if strings.HasPrefix(m[3], "/girlfriend") {
+			continue
+		}
 		// ステータスコード200以外は除外
 		if m[4] != strconv.Itoa(http.StatusOK) {
 			continue

@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"os"
+
 	"github.com/gotoeveryone/golang/common"
 	"github.com/gotoeveryone/golang/logs"
 	"github.com/gotoeveryone/golang/mail"
@@ -62,7 +64,9 @@ func main() {
 	if len(results) > 0 || len(errors) > 0 {
 		if err := sendMail(start, subject, errors); err != nil {
 			logs.Error(err)
+			os.Exit(1)
 		}
+		os.Exit(1)
 	}
 }
 
@@ -76,6 +80,7 @@ func sendMail(start time.Time, subject string, errors []string) error {
 	// エラーがあれば追加
 	if len(errors) > 0 {
 		buffer.WriteString(strings.Join(errors, "\n"))
+		buffer.WriteString("\n\n")
 	}
 
 	// 本文作成
